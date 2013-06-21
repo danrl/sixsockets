@@ -8,8 +8,10 @@ beginner-level training courses.
 example code
 ------------
 
-* addrsrv6.c        	tcp-server that returns the client's ipv6 address
-* bannergrab6.c		simple tcp banner grabber
+* addrsrv6.c        	tcp server that returns the client's ipv6 address
+* bannergrab6.c		tcp banner grabber
+* wisdomsrv6.c		udp server talking about the sound of silence
+* oracle6.c		udp client asking a server for wisdom
 
 
 License
