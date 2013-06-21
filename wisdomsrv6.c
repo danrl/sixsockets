@@ -24,12 +24,9 @@
 #include <sys/socket.h>
 
 #define	SERVERPORT	1337
-#define	LISTENBACKLOG	5
-
 
 const char *progname = "wisdomsrv6";
 const char *progdate = "June 2013";
-
 const char *wisdom = "The words of the prophets\n"			\
 		     "are written on the subway walls,\n"		\
 		     "and tenement halls,\n"				\
