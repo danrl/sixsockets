@@ -8,8 +8,8 @@ beginner-level training courses.
 example code
 ------------
 
-* addrsrv6.c        	server that returns the client's ipv6 address
-* bannergrab6.c		simple banner grabber
+* addrsrv6.c        	tcp-server that returns the client's ipv6 address
+* bannergrab6.c		simple tcp banner grabber
 
 
 License
