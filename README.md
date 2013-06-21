@@ -12,7 +12,7 @@ example code
 * bannergrab6.c		tcp banner grabber
 * wisdomsrv6.c		udp server talking about the sound of silence
 * oracle6.c		udp client asking a server for wisdom
-* mcsnoop.c		snoop icmpv6 messages usind a raw socket
+* mcsnoop6.c		snoop icmpv6 messages usind a raw socket
 
 
 License
