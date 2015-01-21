@@ -1,11 +1,13 @@
 sixsockets
 ==========
 
+[![Build Status](https://travis-ci.org/danrl/sixsockets.svg?branch=master)](https://travis-ci.org/danrl/sixsockets)
+
 Simple code examples using IPv6 sockets. Good for educational use and
 beginner-level training courses.
 
 
-example code
+Example Code
 ------------
 
 * addrsrv6.c        	tcp server that returns the client's ipv6 address
