@@ -23,7 +23,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 
-#define	SERVERPORT	2342
+#define	SERVERPORT	1337
 #define	LISTENBACKLOG	5
 
 
