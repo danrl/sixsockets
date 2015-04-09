@@ -1,5 +1,21 @@
+# travis ci
 language: c
 compiler:
   - gcc
   - clang
 script: make
+
+
+# coverity scan
+env:
+  global:
+   - secure: "fY4Qk/ul4MT+JGezr1b6nyB34T5qxX11DsbUk16c37Nguwl3jGt5K1WGAcaze9tqBgr0zDK//7g233qlCajMlUw3tOpqBpVYmHLCT1n0FwIpOpVrtKhvQcpPRY4brLBpiiTCZD0zmpcy4SFN0CKaFhBeoHqkL94VkI9T8OiglMw="
+
+addons:
+  coverity_scan:
+    project:
+      name: "danrl/sixsockets"
+    notification_email: mail@danrl.de
+    build_command_prepend: ""
+    build_command: "make"
+    branch_pattern: coverity_scan
