@@ -4,7 +4,7 @@
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
  * copyright notice and this permission notice appear in all copies.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
  * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
@@ -28,41 +28,41 @@ const char *progdate = "June 2013";
 
 int main (int argc, char *argv[])
 {
-	int sd;
-	struct sockaddr_in6 sa;
-	socklen_t sa_size = sizeof(sa);
-	char buffer[1024] = { 0x0 };
-	char address[INET6_ADDRSTRLEN] = { 0x0 };
+    int sd;
+    struct sockaddr_in6 sa;
+    socklen_t sa_size = sizeof(sa);
+    char buffer[1024] = { 0x0 };
+    char address[INET6_ADDRSTRLEN] = { 0x0 };
 
-	/* create raw socket */
-	if ((sd = socket(AF_INET6, SOCK_RAW, IPPROTO_ICMPV6)) < 0) {
-		fprintf(stderr, "error: socket: %s\n", strerror(errno));
-		return EXIT_FAILURE;
-	}
-	/*
-	 * further filtering von icmpv6 messages can be achieved through
-	 * the advanced sockets API for IPv6
-	 * https://tools.ietf.org/html/rfc2292#section-3.2
-	 */
+    /* create raw socket */
+    if ((sd = socket(AF_INET6, SOCK_RAW, IPPROTO_ICMPV6)) < 0) {
+        fprintf(stderr, "error: socket: %s\n", strerror(errno));
+        return EXIT_FAILURE;
+    }
+    /*
+     * further filtering von icmpv6 messages can be achieved through
+     * the advanced sockets API for IPv6
+     * https://tools.ietf.org/html/rfc2292#section-3.2
+     */
 
-	for (;;) {
-		/* receive data */
-		int len;
-		len = recvfrom(sd, buffer, sizeof(buffer) - 1, 0,
-			       (struct sockaddr *) &sa, &sa_size);
+    for (;;) {
+        /* receive data */
+        int len;
+        len = recvfrom(sd, buffer, sizeof(buffer) - 1, 0,
+                       (struct sockaddr *) &sa, &sa_size);
 
-		/* get presentation of sender address */
-		inet_ntop(AF_INET6, &sa.sin6_addr, address, sizeof(address));
+        /* get presentation of sender address */
+        inet_ntop(AF_INET6, &sa.sin6_addr, address, sizeof(address));
 
-		/* print data pretending it is a string */
-		printf("received %d bytes from %s\n", len, address);
-		for (int i = 0; i < len; i++)
-			printf("%02x", buffer[i] & 0xff);
-		printf("\n");
-	}
+        /* print data pretending it is a string */
+        printf("received %d bytes from %s\n", len, address);
+        for (int i = 0; i < len; i++)
+            printf("%02x", buffer[i] & 0xff);
+        printf("\n");
+    }
 
-	/* close socket */
-	close(sd);
-	return EXIT_SUCCESS;
+    /* close socket */
+    close(sd);
+    return EXIT_SUCCESS;
 }
 
