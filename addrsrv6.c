@@ -31,7 +31,8 @@ const char *progname = "addrsrv6";
 const char *progdate = "June 2013";
 
 
-int main (int argc, char *argv[])
+int main (int __attribute__((unused)) argc,
+          char __attribute__((unused)) *argv[])
 {
     int sd, sdc;
     struct sockaddr_in6 sa, sac;
