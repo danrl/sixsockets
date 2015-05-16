@@ -1,5 +1,5 @@
 CC	=	gcc
-CFLAGS	+=	-std=c99 -Wall -pedantic
+CFLAGS	+=	-std=c99 -Wall -Wextra -pedantic
 LDFLAGS	+=
 
 all:	addrsrv6 \

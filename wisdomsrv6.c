@@ -32,7 +32,8 @@ const char *wisdom = "The words of the prophets\n"                \
                      "and tenement halls,\n"                      \
                      "and whispered in the sound of silence.\n";
 
-int main (int argc, char *argv[])
+int main (int __attribute__((unused)) argc,
+          char __attribute__((unused)) *argv[])
 {
     int sd;
     struct sockaddr_in6 sa, sac;
