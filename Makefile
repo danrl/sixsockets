@@ -2,9 +2,12 @@ CC	=	gcc
 CFLAGS	+=	-std=c99 -Wall -pedantic
 LDFLAGS	+=
 
-all:	addrsrv6 bannergrab6 \
-	oracle6 wisdomsrv6 \
-	mcsnoop6
+all:	addrsrv6 \
+	bannergrab6 \
+	oracle6 \
+	wisdomsrv6 \
+	mcsnoop6 \
+	flowgen6
 
 addrsrv6: addrsrv6.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
@@ -20,6 +23,11 @@ wisdomsrv6: wisdomsrv6.c
 
 mcsnoop6: mcsnoop6.c
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
+
+flowgen6: flowgen6.c
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $<
+
+
 clean:
 	rm -rf	addrsrv6 \
 		addrsrv6.o
@@ -31,5 +39,7 @@ clean:
 		wisdomsrv6.o
 	rm -rf	mcsnoop6 \
 		mcsnoop6.o
+	rm -rf	flowgen6 \
+		flowgen6.o
 
 .PHONY: clean

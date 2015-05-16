@@ -21,34 +21,49 @@
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <linux/in6.h>
 #include <sys/socket.h>
+#include <time.h>       /* to initialize srand() */
 
-#define SERVERPORT  1337
 
-const char *progname = "wisdomsrv6";
-const char *progdate = "June 2013";
-const char *wisdom = "The words of the prophets\n"                \
-                     "are written on the subway walls,\n"         \
-                     "and tenement halls,\n"                      \
-                     "and whispered in the sound of silence.\n";
+const char *progname = "flowgen6";
+const char *progdate = "May 2015";
+
 
 int main (int argc, char *argv[])
 {
     int sd;
-    struct sockaddr_in6 sa, sac;
-    socklen_t sac_size = sizeof(sac);
+    int port;
+    struct sockaddr_in6 sa;
+    int i;
+    const int on = 1;
     char address[INET6_ADDRSTRLEN] = { 0x0 };
+
+    /* print usage information on invocation error */
+    if (argc != 3) {
+        fprintf(stderr, "%s %s\n", progname, progdate);
+        fprintf(stderr, "usage: %s <ipv6 address> <port>\n", argv[0]);
+        return EXIT_FAILURE;
+    }
 
     /* initialize sockaddr */
     memset(&sa, 0x0, sizeof(sa));
     sa.sin6_family = AF_INET6;
-    sa.sin6_port = htons(SERVERPORT);
-    /*
-     * note: in6addr_any refers to :: and :: is all zeros. since we used
-     * memset to zero the whole struct sockaddr_in6 everything is fine.
-     * one could, of course, explicitly set the address:
-     * memcpy(sa.sin6_addr, in6addr_any, sizeof(sin6_addr));
-     */
+
+    /* check and set address */
+    if (inet_pton(AF_INET6, argv[1], &sa.sin6_addr) != 1) {
+        fprintf(stderr, "error: invalid address\n");
+        return EXIT_FAILURE;
+    }
+
+    /* check and set port */
+    port = atoi(argv[2]);
+    if (port < 1 || port > 1<<16) {
+        fprintf(stderr, "error: invalid port\n");
+        return EXIT_FAILURE;
+    }
+    sa.sin6_port = htons(port);
+
 
     /* create udp socket */
     if ((sd = socket(AF_INET6, SOCK_DGRAM, 0)) < 0) {
@@ -56,32 +71,30 @@ int main (int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    /* bind socket */
-    if (bind(sd, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
-        fprintf(stderr, "error: bind: %s\n", strerror(errno));
+    /* set autoflowlabel */
+    if (setsockopt(sd, SOL_IPV6, IPV6_AUTOFLOWLABEL, (void *) &on, sizeof(on)) == -1) {
+        fprintf(stderr, "error: setsockopt: %s\n", strerror(errno));
+        return EXIT_FAILURE;
+    }
+
+    /* start 'connection' */
+    if (connect(sd, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
+        fprintf(stderr, "error: connect: %s\n", strerror(errno));
         close(sd);
         return EXIT_FAILURE;
     }
 
-    for (;;) {
-        /* act upon incoming datagrams */
-        if (recvfrom(sd, NULL, 0, 0, (struct sockaddr *) &sac, &sac_size) < 0) {
-            fprintf(stderr, "error: recvfrom: %s\n", strerror(errno));
-            close(sd);
-            return EXIT_FAILURE;
-        }
-
-        /* get presentation of client address */
-        inet_ntop(AF_INET6, &sac.sin6_addr, address, sizeof(address));
-        printf("datagram from: [%s]:%d\n", address, ntohs(sac.sin6_port));
-
-        /* send the client some wisdom */
-        if (sendto(sd, wisdom, strlen(wisdom), 0,
-                   (struct sockaddr *) &sac, sizeof(sac)) < 0) {
+    /* send 3 datagrams */
+    inet_ntop(AF_INET6, &sa.sin6_addr, address, sizeof(address));
+    for (i = 0; i < 3; i++) {
+        /* send empty datagram */
+        printf("sending datagram to [%s]:%d\n", address, ntohs(sa.sin6_port));
+        if (sendto(sd, NULL, 0, 0, NULL, 0) < 0) {
             fprintf(stderr, "error: sendto: %s\n", strerror(errno));
             close(sd);
             return EXIT_FAILURE;
         }
+        sleep(1);
     }
 
     /* close socket */
