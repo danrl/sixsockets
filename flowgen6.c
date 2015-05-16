@@ -20,10 +20,12 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include <linux/in6.h>
+#include <netinet/in.h>
 #include <sys/socket.h>
 #include <time.h>       /* to initialize srand() */
 
+
+#define IPV6_AUTOFLOWLABEL      70 /* see uapi/linux/in6.h */
 
 const char *progname = "flowgen6";
 const char *progdate = "May 2015";
